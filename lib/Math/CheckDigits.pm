@@ -5,7 +5,8 @@ use strict;
 use warnings;
 use integer;
 use utf8;
-our $VERSION = '0.01';
+our $VERSION = '0.01_01';
+$VERSION = eval $VERSION;
 
 my %DEFAULT = (
     TRANS_TABLE => {},

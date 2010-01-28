@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use integer;
 use utf8;
-our $VERSION = '0.01_01';
+our $VERSION = '0.02';
 $VERSION = eval $VERSION;
 
 my %DEFAULT = (
@@ -38,7 +38,6 @@ sub checkdigit {
     
     @digits = reverse @digits if $self->options('start_at_right');
     
-    # only support non runes format at present.
     my $check_sum = $self->_calc_check_sum( $self->{weight}, @digits );
     my $check_digit = $check_sum % $self->{modulus};
     

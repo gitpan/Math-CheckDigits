@@ -5,12 +5,12 @@ use strict;
 use warnings;
 use integer;
 use utf8;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 $VERSION = eval $VERSION; ## no critic
 
 my %DEFAULT = (
-    TRANS_TABLE => {},
-    OPTIONS     => {
+    trans_table => {},
+    options     => {
         start_at_right  => 1, # multipule
         DSR             => 1, # use DSR or DR
         runes           => 0, # use runes
@@ -19,15 +19,29 @@ my %DEFAULT = (
 
 sub new {
     my $cls = shift;
-    my $self = \%DEFAULT;
+    my $self = {};
     if ( @_ == 2 ){
         ( $self->{modulus}, $self->{weight} ) = @_
     }
-    else{
+    else {
         $self = { %$self, ref $_[0] ? %{$_[0]} : @_ };
     }
     die 'not enough arguments!'
         if !$self->{modulus} || !$self->{weight};
+
+    if (!ref $self->{weight}) {
+        $self->{weight} = [$self->{weight}, 1];
+    }
+
+    $self->{trans_table} = {
+        %{$DEFAULT{trans_table}},
+        %{$self->{trans_table} || {}},
+    };
+
+    $self->{options} = {
+        %{$DEFAULT{options}},
+        %{$self->{options} || {}},
+    };
 
     bless $self, $cls;
 }
@@ -69,20 +83,20 @@ sub complete {
 sub trans_table {
     my $self = shift;
     if ( @_ ){
-        $self->{TRANS_TABLE} = ref $_[0] ? shift : { @_ };
+        $self->{trans_table} = ref $_[0] ? shift : { @_ };
         return $self;
     }
-    return %{$self->{TRANS_TABLE}};
+    return %{$self->{trans_table}};
 }
 
 sub options {
     my $self = shift;
 
-    return %{$self->{OPTIONS}} if @_ == 0;
-    return $self->{OPTIONS}{$_[0]} if (@_ == 1) && (!ref $_[0]);
+    return %{$self->{options}} if @_ == 0;
+    return $self->{options}{$_[0]} if (@_ == 1) && (!ref $_[0]);
 
-    $self->{OPTIONS}
-        = { %{$self->{OPTIONS}}, ref $_[0] ? %{$_[0]} : @_ };
+    $self->{options}
+        = { %{$self->{options}}, ref $_[0] ? %{$_[0]} : @_ };
 
     return $self;
 }

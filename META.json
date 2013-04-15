@@ -53,7 +53,7 @@
    "provides" : {
       "Math::CheckDigits" : {
          "file" : "lib/Math/CheckDigits.pm",
-         "version" : "0.04"
+         "version" : "0.05"
       }
    },
    "release_status" : "stable",
@@ -67,5 +67,5 @@
          "web" : "https://github.com/Songmu/Math-CheckDigits"
       }
    },
-   "version" : "0.04"
+   "version" : "0.05"
 }
